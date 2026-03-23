@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Sample Page</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f2f5;
+        }
+        .card {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h1>Hello, World!</h1>
+        <p>This is a sample HTML template created for you.</p>
+        <button id="myButton">Click Me</button>
+        <p id="message" style="margin-top: 20px; color: #28a745; font-weight: bold;"></p>
+    </div>
+
+    <script>
+        const button = document.getElementById('myButton');
+        const message = document.getElementById('message');
+
+        button.addEventListener('click', () => {
+            message.textContent = "You clicked the button! 🚀";
+        });
+    </script>
+</body>
+</html>
