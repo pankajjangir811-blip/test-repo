@@ -1,19 +1,37 @@
-name: CI Test
+name: Nginx CD Test
 
 on:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
-  test:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repo
+        uses: actions/checkout@v4
 
-      - name: Show files
-        run: ls -la
+      - name: Verify index file
+        run: |
+          echo "Checking files..."
+          ls -la
+          ls -la app
+          test -f app/index.html
 
-      - name: Test
-        run: echo "CI/CD working successfully"
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -p ${{ secrets.PORT }} -H ${{ secrets.HOST }} >> ~/.ssh/known_hosts
+
+      - name: Deploy index.html to Nginx
+        run: |
+          rsync -avz -e "ssh -i ~/.ssh/id_ed25519 -p ${{ secrets.PORT }}" ./app/ ${{ secrets.USERNAME }}@${{ secrets.HOST }}:/var/www/html/
+
+      - name: Restart nginx
+        run: |
+          ssh -i ~/.ssh/id_ed25519 -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} "sudo systemctl restart nginx"
